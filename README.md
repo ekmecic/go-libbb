@@ -15,7 +15,7 @@ Note: `go-libbb` is still in development meaning many of the features haven't ye
 
 ## Usage
 ```bash
-go get github.com/ekmecic/go-libbbb
+go get github.com/ekmecic/go-libbb
 ```
 ## Acknowlegements
 I'd like to thank (in no particular order):
