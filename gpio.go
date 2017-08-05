@@ -39,15 +39,15 @@ const (
 
 // Represents a pin configured as a GPIO.
 type GPIO struct {
-	pin_num  int
-	dir_path string
+	pinNum  int
+	dirPath string
 }
 
 // Create a new GPIO pin object.
-func New(pin_num int) *GPIO {
+func New(pinNum int) *GPIO {
 	gpio := new(GPIO)
-	gpio.pin_num = pin_num
-	gpio.dir_path = fmt.Sprintf("/sys/class/gpio/gpio%d", gpio.pin_num)
+	gpio.pinNum = pinNum
+	gpio.dirPath = fmt.Sprintf("/sys/class/gpio/gpio%d", gpio.pinNum)
 	return gpio
 }
 
@@ -62,7 +62,7 @@ func (gpio *GPIO) SetDirection(pd PinDirection) error {
 		direction = []byte("out")
 	}
 
-	file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", gpio.pin_num), os.O_WRONLY|os.O_SYNC, 0666)
+	file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", gpio.pinNum), os.O_WRONLY|os.O_SYNC, 0666)
 	_, err = file.Write(direction)
 
 	if err != nil {
@@ -73,17 +73,17 @@ func (gpio *GPIO) SetDirection(pd PinDirection) error {
 
 // SetExportState enables or disables the GPIO pin.
 func (gpio *GPIO) SetExportState(es ExportState) error {
-	if _, err := os.Stat(gpio.dir_path); os.IsNotExist(err) && es == Exported {
+	if _, err := os.Stat(gpio.dirPath); os.IsNotExist(err) && es == Exported {
 		// Try to export if the GPIO isn't already exported
 		file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/export"), os.O_WRONLY|os.O_SYNC, 0666)
-		_, err = file.Write([]byte(strconv.Itoa(gpio.pin_num)))
+		_, err = file.Write([]byte(strconv.Itoa(gpio.pinNum)))
 		if err != nil {
 			return err
 		}
-	} else if _, err := os.Stat(gpio.dir_path); err == nil && es == UnExported {
+	} else if _, err := os.Stat(gpio.dirPath); err == nil && es == UnExported {
 		// Try to unexport if the GPIO is already exported
 		file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/unexport"), os.O_WRONLY|os.O_SYNC, 0666)
-		_, err = file.Write([]byte(strconv.Itoa(gpio.pin_num)))
+		_, err = file.Write([]byte(strconv.Itoa(gpio.pinNum)))
 		if err != nil {
 			return err
 		}
@@ -106,7 +106,7 @@ func (gpio *GPIO) Write(s PinState) error {
 	}
 
 	// Write to the file and make sure it worked.
-	file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value", gpio.pin_num), os.O_WRONLY|os.O_SYNC, 0666)
+	file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value", gpio.pinNum), os.O_WRONLY|os.O_SYNC, 0666)
 	_, err = file.Write(state)
 	if err != nil {
 		return err
@@ -118,11 +118,11 @@ func (gpio *GPIO) Write(s PinState) error {
 func (gpio *GPIO) Read() (state PinState, err error) {
 	// Read from the file.
 	buf := make([]byte, 4)
-	file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value", gpio.pin_num), os.O_RDONLY|os.O_SYNC, 0666)
-	num_bytes, err := file.Read(buf)
+	file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value", gpio.pinNum), os.O_RDONLY|os.O_SYNC, 0666)
+	numBytes, err := file.Read(buf)
 
 	// Check if the file was read properly.
-	if num_bytes != 2 {
+	if numBytes != 2 {
 		return 0, errors.New("Unable to read from GPIO pin")
 	} else if buf[0] == '1' {
 		return High, nil
