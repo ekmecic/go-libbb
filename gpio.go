@@ -84,14 +84,14 @@ func (gpio *GPIO) SetDirection(pd PinDirection) error {
 func (gpio *GPIO) SetExportState(es ExportState) error {
 	if _, err := os.Stat(gpio.dirPath); os.IsNotExist(err) && es == Exported {
 		// Try to export if the GPIO isn't already exported
-		file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/export"), os.O_WRONLY|os.O_SYNC, 0666)
+		file, err := os.OpenFile("/sys/class/gpio/export", os.O_WRONLY|os.O_SYNC, 0666)
 		_, err = file.Write([]byte(strconv.Itoa(gpio.pinNum)))
 		if err != nil {
 			return err
 		}
 	} else if _, err := os.Stat(gpio.dirPath); err == nil && es == UnExported {
 		// Try to unexport if the GPIO is already exported
-		file, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/unexport"), os.O_WRONLY|os.O_SYNC, 0666)
+		file, err := os.OpenFile("/sys/class/gpio/unexport", os.O_WRONLY|os.O_SYNC, 0666)
 		_, err = file.Write([]byte(strconv.Itoa(gpio.pinNum)))
 		if err != nil {
 			return err
