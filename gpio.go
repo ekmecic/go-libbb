@@ -13,37 +13,46 @@ import (
 // It's ugly and inferior to enums + pattern matching, but it works and it's
 // better than the alternative.
 
-// The direction of the pin, which can be either an input or output.
+// PinDirection is the direction of the pin, which can be either an input or output.
 type PinDirection int
 
 const (
+	// In means the pin is an input, and will read logic levels.
 	In PinDirection = iota
+	// Out means the pin is an output, and will write logic levels.
 	Out
 )
 
-// The state in which the pin is in, either exported or unexported.
+// ExportState is state in which the pin is in, either exported or unexported.
 type ExportState int
 
 const (
+	// Exported means the pin will be made ready to use.
 	Exported ExportState = iota
+	// UnExported means the pin will be unavailable for use.
+	// This is the default state when the pin is first created.
 	UnExported
 )
 
-// The logic level of an output GPIO pin, either high or low.
+// PinState is the logic level of an output GPIO pin, either high or low.
 type PinState int
 
 const (
+	// High means the pin is either writing or reading the high logic level,
+	// which is 3.3V on the BeagleBone.
 	High PinState = iota
+	// Low means the pin is either writing or reading the low logic level,
+	// which is 0V.
 	Low
 )
 
-// Represents a pin configured as a GPIO.
+// GPIO represents a pin configured as a GPIO.
 type GPIO struct {
 	pinNum  int
 	dirPath string
 }
 
-// Create a new GPIO pin object.
+// New creates a new GPIO pin object.
 func New(pinNum int) *GPIO {
 	gpio := new(GPIO)
 	gpio.pinNum = pinNum
