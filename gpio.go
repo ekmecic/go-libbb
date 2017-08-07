@@ -23,17 +23,6 @@ const (
 	Out
 )
 
-// ExportState is state in which the pin is in, either exported or unexported.
-type ExportState int
-
-const (
-	// Exported means the pin will be made ready to use.
-	Exported ExportState = iota
-	// UnExported means the pin will be unavailable for use.
-	// This is the default state when the pin is first created.
-	UnExported
-)
-
 // PinState is the logic level of an output GPIO pin, either high or low.
 type PinState int
 
