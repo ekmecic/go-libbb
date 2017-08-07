@@ -41,8 +41,8 @@ type GPIO struct {
 	dirPath string
 }
 
-// New creates a new GPIO pin object.
-func New(pinNum uint8) *GPIO {
+// NewGPIO creates a new GPIO pin object.
+func NewGPIO(pinNum uint8) *GPIO {
 	gpio := new(GPIO)
 	gpio.pinNum = pinNum
 	gpio.dirPath = fmt.Sprintf("/sys/class/gpio/gpio%d", gpio.pinNum)
