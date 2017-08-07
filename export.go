@@ -1,4 +1,4 @@
-package libbeaglebone
+package golibbeaglebone
 
 // ExportState is state in which the device is in, either exported or unexported.
 type ExportState int

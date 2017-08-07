@@ -1,4 +1,4 @@
-package libbeaglebone
+package golibbeaglebone
 
 import (
 	"errors"
