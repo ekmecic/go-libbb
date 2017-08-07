@@ -37,12 +37,12 @@ const (
 
 // GPIO represents a pin configured as a GPIO.
 type GPIO struct {
-	pinNum  int
+	pinNum  uint8
 	dirPath string
 }
 
 // New creates a new GPIO pin object.
-func New(pinNum int) *GPIO {
+func New(pinNum uint8) *GPIO {
 	gpio := new(GPIO)
 	gpio.pinNum = pinNum
 	gpio.dirPath = fmt.Sprintf("/sys/class/gpio/gpio%d", gpio.pinNum)
@@ -74,14 +74,14 @@ func (gpio *GPIO) SetExportState(es ExportState) error {
 	if _, err := os.Stat(gpio.dirPath); os.IsNotExist(err) && es == Exported {
 		// Try to export if the GPIO isn't already exported
 		file, err := os.OpenFile("/sys/class/gpio/export", os.O_WRONLY|os.O_SYNC, 0666)
-		_, err = file.Write([]byte(strconv.Itoa(gpio.pinNum)))
+		_, err = file.Write([]byte(strconv.Itoa(int(gpio.pinNum))))
 		if err != nil {
 			return err
 		}
 	} else if _, err := os.Stat(gpio.dirPath); err == nil && es == UnExported {
 		// Try to unexport if the GPIO is already exported
 		file, err := os.OpenFile("/sys/class/gpio/unexport", os.O_WRONLY|os.O_SYNC, 0666)
-		_, err = file.Write([]byte(strconv.Itoa(gpio.pinNum)))
+		_, err = file.Write([]byte(strconv.Itoa(int(gpio.pinNum))))
 		if err != nil {
 			return err
 		}
