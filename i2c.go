@@ -9,7 +9,6 @@ import (
 // I2C_SLAVE is the Linux magic number for setting I2C slave addresses.
 const I2C_SLAVE = 0x0703
 
-
 // I2C represents an I2C device.
 type I2C struct {
 	i2cNum  uint8
@@ -32,11 +31,7 @@ func NewI2C(i2cNum uint8) (*I2C, error) {
 
 // SetSlaveAddress sets the address of the I2C slave device.
 func (i2c *I2C) SetSlaveAddress(slaveAddress uint16) error {
-	f, err := os.OpenFile(fmt.Sprintf("/dev/i2c-%d", i2c.i2cNum), os.O_RDWR, 0600)
-	if err != nil {
-		return err
-	}
-	if err := ioctl(f.Fd(), I2C_SLAVE, uintptr(slaveAddress)); err != nil {
+	if err := ioctl(i2c.i2cFile.Fd(), I2C_SLAVE, uintptr(slaveAddress)); err != nil {
 		return err
 	}
 	return nil
