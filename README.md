@@ -9,7 +9,7 @@ golibbeaglebone will be feature-complete when the following interfaces are all i
 - [x] ADC
 - [ ] UART
 - [ ] SPI
-- [ ] I2C
+- [x] I2C
 
 Note: `golibbeaglebone` is still in development meaning many of the features haven't yet been implemented.
 
